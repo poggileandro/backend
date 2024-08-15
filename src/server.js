@@ -11,9 +11,6 @@ const {Server}  = require('socket.io');
 const fs = require('fs');
 
 
-
-
-
 const app = express();
 const PORT = process.env.PORT ||  8080;
 
@@ -23,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Servir archivos estáticos
 app.use( express.static(path.join(__dirname,'public')));
+app.use(logger('dev'));
 
 //configuracion de plantillas
 app.engine('handlebars',handlebars.engine());

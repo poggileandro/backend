@@ -38,5 +38,21 @@
         "stock": "5",
         "categoria": "5",
         "codigo": "5"
+    },
+    {
+        "nombre": "",
+        "precio": "",
+        "descripcion": "",
+        "stock": "",
+        "categoria": "",
+        "codigo": ""
+    },
+    {
+        "nombre": "",
+        "precio": "",
+        "descripcion": "",
+        "stock": "",
+        "categoria": "",
+        "codigo": ""
     }
 ]
