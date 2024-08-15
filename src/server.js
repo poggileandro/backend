@@ -34,7 +34,7 @@ app.set('view engine' , 'handlebars');
 app.use('/api/productos', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/carts', cartRouter);
-app.use('/api/views', viewsRouter);
+app.use('/', viewsRouter);
 
 
 //el array que voy a guardar los productos y que voy a mostrar
