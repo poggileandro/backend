@@ -44,6 +44,7 @@ router.get('/', (req, res) => {
 });
 
 
+
 //obtener un producto por id
 router.get('/:uid', (req, res) => {
     const {uid} = req.params;
@@ -56,6 +57,8 @@ router.get('/:uid', (req, res) => {
     }
     res.send({ data: productoAMostrar });
 });
+
+
 
 
 //cargar 1 producto nuevo

@@ -1,52 +1,42 @@
 [
     {
-        "id": 1,
-        "nombre": "leandro",
-        "precio": "poggi",
-        "descripcion": "pruebaa",
-        "stock": "0",
-        "category": "prueba",
-        "estado": true,
-        "codigo": "ejemplo"
+        "nombre": "2",
+        "precio": "2",
+        "descripcion": "2",
+        "stock": "2",
+        "categoria": "2",
+        "codigo": "2"
     },
     {
-        "id": 2,
-        "nombre": "leandro",
-        "precio": "poggi",
-        "descripcion": "pruebaa",
-        "stock": "0",
-        "category": "prueba",
-        "estado": true,
-        "codigo": "ejemplo"
+        "nombre": "2",
+        "precio": "3",
+        "descripcion": "3",
+        "stock": "3",
+        "categoria": "3",
+        "codigo": "3"
     },
     {
-        "id": 3,
-        "nombre": "leandro",
-        "precio": "poggi",
-        "descripcion": "pruebaa",
-        "stock": "0",
-        "category": "prueba",
-        "estado": true,
-        "codigo": "ejemplo"
+        "nombre": "2",
+        "precio": "2",
+        "descripcion": "2",
+        "stock": "4",
+        "categoria": "4",
+        "codigo": "4"
     },
     {
-        "id": 4,
-        "nombre": "leandro",
-        "precio": "poggi",
-        "descripcion": "pruebaa",
-        "stock": "0",
-        "category": "prueba",
-        "estado": true,
-        "codigo": "ejemplo"
+        "nombre": "4",
+        "precio": "4",
+        "descripcion": "4",
+        "stock": "4",
+        "categoria": "4",
+        "codigo": "4"
     },
     {
-        "id": 5,
-        "nombre": "leandro",
-        "precio": "poggi",
-        "descripcion": "pruebaa",
-        "stock": "0",
-        "category": "prueba",
-        "estado": true,
-        "codigo": "ejemplo"
+        "nombre": "5",
+        "precio": "5",
+        "descripcion": "5",
+        "stock": "5",
+        "categoria": "5",
+        "codigo": "5"
     }
 ]

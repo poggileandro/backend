@@ -1,0 +1,35 @@
+<form method="get" id="productoForm">
+    <h1>Productos en tiempo Real</h1>
+    <div>
+        <p>Ingrese Nombre del producto:</p>
+        <input type="text" name="nombre">
+    </div>
+    <div>
+        <p>Ingrese Precio:</p>
+        <input type="number" name="precio">
+    </div>
+    <div>
+        <p>Ingrese Descripción:</p>
+        <input type="text" name="descripcion">
+    </div>
+    <div>
+        <p>Ingrese Stock:</p>
+        <input type="number" name="stock">
+    </div>
+    <div>
+        <p>Ingrese Categoría:</p>
+        <input type="text" name="categoria">
+    </div>
+    <div style="padding-bottom: 10px;">
+        <p>Ingrese Código:</p>
+        <input type="text" name="codigo">
+    </div>
+    <button type="submit" >Enviar</button>
+</form>
+
+<ul id="lista">
+  
+</ul>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/assets/js/index.js"></script>
