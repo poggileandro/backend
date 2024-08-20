@@ -110,5 +110,9 @@ router.delete('/:uid', (req, res) => {
     res.send({ data: productos });
 });
 
-module.exports = router;
-//exportar el router
+module.exports = {
+    router, // Exporta el router
+    readProductosFromFile, // Exporta la función sin ejecutarla
+    writeProductosToFile,
+    productos // Exporta la función sin ejecutarla
+};
