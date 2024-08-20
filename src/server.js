@@ -44,12 +44,11 @@ io.on('connection', (socket) => {
 
     // Enviar la lista de productos al nuevo cliente
     socket.emit('productosActualizados', productos);
-
     // Manejar el evento 'nuevoProducto'
     socket.on('nuevoProducto', (data) => {
         console.log('Nuevo producto recibido:', data);
         productos.push(data);
-        writeProductosToFile();
+        writeProductosToFile(productos);
         io.emit('productosActualizados', productos);
     });
 });

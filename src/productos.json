@@ -54,5 +54,13 @@
         "stock": "",
         "categoria": "",
         "codigo": ""
+    },
+    {
+        "nombre": "leooo",
+        "precio": "2",
+        "descripcion": "2",
+        "stock": "2",
+        "categoria": "2",
+        "codigo": "2"
     }
 ]

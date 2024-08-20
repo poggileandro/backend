@@ -32,7 +32,7 @@ const readProductosFromFile = () => {
 };
 
 // Escribir productos al archivo JSON
-const writeProductosToFile = () => {
+const writeProductosToFile = (productos) => {
     fs.writeFileSync(path.join(__dirname, '../productos.json'), JSON.stringify(productos, null, 4));
 };
 //leo el archivo al iniciar 
