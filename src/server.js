@@ -9,6 +9,8 @@ const { Uploader } = require('./utils/multer.js');
 const handlebars = require('express-handlebars');
 const { Server } = require('socket.io');
 const fs = require('fs');
+const { connectDB } = require('./config/index.js');
+
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -25,6 +27,11 @@ app.use(logger('dev'));
 app.engine('handlebars', handlebars.engine());
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'handlebars');
+
+
+//base de datos Mongo
+
+connectDB();
 
 // Rutas
 app.use('/api/productos', productRouter);
@@ -53,6 +60,3 @@ io.on('connection', (socket) => {
     });
 });
 
-//app.listen(PORT, () => {
-//    console.log('Escuchando en el puerto', PORT);
-//});

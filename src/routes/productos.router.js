@@ -1,11 +1,12 @@
 const { Router } = require('express');
 const fs = require('fs');
 const path = require('path');
+const { productManagerMongo } = require('../manager/products.Manager.mongo');
 
 const router = Router();
+const productService = new productManagerMongo();
 
 //creo la clase de productos
-
 class Producto {
     constructor(id, nombre, precio, descripcion,stock,category,estado,codigo) {
         this.id = id;
@@ -20,7 +21,6 @@ class Producto {
 }
 //el array que voy a guardar los productos y que voy a mostrar
 let productos = [];
-
 // Leer productos del archivo JSON 
 const readProductosFromFile = () => {
     try {
@@ -39,75 +39,70 @@ const writeProductosToFile = (productos) => {
 readProductosFromFile();
 
 //obtener todos los productos 
-router.get('/', (req, res) => {
-    res.send({ data: productos });
+router.get('/', async (req, res) => {
+    try{
+        const products =await productService.getProducts();
+        res.send({status:'success', payload: {products}})
+    }catch(error){
+        console.log(error)
+    }
 });
 
 
 
 //obtener un producto por id
-router.get('/:uid', (req, res) => {
-    const {uid} = req.params;
-    let productoAMostrar ;
-
-    productoAMostrar = productos.find((producto)=>producto.id === parseInt(uid ));
-
-    if (!productoAMostrar) {
-        return res.status(404).send({ status: 'error', error: 'No existe ese ID' });
+router.get('/:pid', async(req, res) => {
+    const {pid} = req.params;
+    try{
+        const productoAMostrar = await productService.getProduct(pid)
+        res.send({status:'success', payload: productoAMostrar })
     }
-    res.send({ data: productoAMostrar });
+    catch(error){
+      console.log(error)
+    }
 });
 
-
-
-
 //cargar 1 producto nuevo
-router.post('/', (req, res) => {
-    const { body } = req;
-
-    if (!body.nombre || !body.precio || !body.descripcion || !body.stock || !body.category || !body.codigo) {
-        return res.status(400).send({ status: 'error', error: 'faltan datos' });
+router.post('/', async(req, res) => {
+    try{
+        const { body } = req;
+        if (!body.nombreProducto || !body.stockProducto ||!body.codigoProducto) {
+            return res.status(400).send({ status: 'error', error: 'faltan datos' });
+        }
+        const result  = await productService.createProduct(body)
+        res.status(200).send({ data: result });
     }
-    const nuevoProducto = new Producto(
-        productos.length + 1,
-        body.nombre,
-        body.precio,
-        body.descripcion,
-        body.stock,
-        body.category,
-        body.estado,
-        body.codigo
-        );
-    productos.push(nuevoProducto);
-    writeProductosToFile();
-    res.status(200).send({ data: productos });
+    catch(e){
+     console.log(e);
+    } 
 });
 
 //editar de a un producto
-router.put('/:uid', (req, res) => {
-    const { uid } = req.params;
-    const { body } = req;
-
-    const productoIndex = productos.findIndex(producto => producto.id === parseInt(uid));
-    
-    if (productoIndex === -1) {
-        return res.status(404).send({ status: 'error', error: 'Producto no encontrado' });
+router.put('/:pid', async (req, res) => {
+  const {pid} = req.params
+  try{
+    let productoAEditar = req.body
+    if (!productoAEditar.nombreProducto || !productoAEditar.stockProducto ||!productoAEditar.codigoProducto) {
+        return res.status(400).send({ status: 'error', error: 'faltan datos' });
     }
-
-    const productoActualizado = { ...productos[productoIndex], ...body };
-    productos[productoIndex] = productoActualizado;
-    writeProductosToFile();
-
-    res.status(200).send({ data: productoActualizado });
+    const result = await productService.updateProduct({_id:pid} , productoAEditar);
+     res.status(200).send({status:'success', message:'producto actualizado'})
+  }catch(e){
+    console.log(e)
+}  
 });
 
 
 //eliminar un producto
-router.delete('/:uid', (req, res) => {
-    const { uid } = req.params;
-    productos = productos.filter(producto => producto.id !== parseInt(uid));
-    writeProductosToFile();
-    res.send({ data: productos });
+router.delete('/:pid', async(req, res) => {
+ const {pid}  = req.params
+ try{
+    const result = await productService.deleteProduct({_id:pid})
+    res.send({status:'success', message:'producto eliminado'})
+ }
+ catch(e){
+console.log(e)
+ }
 });
 
 module.exports = {

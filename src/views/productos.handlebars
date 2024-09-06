@@ -1,0 +1,39 @@
+<h1>Bienvenidos a Productos</h1>
+<form method="get" action="/productos">
+    <input type="text" name="search" placeholder="Buscar productos" value="{{search}}">
+    <input type="submit" value="Buscar">
+    <input type="hidden" name="limit" value="{{limit}}">
+    <input type="hidden" name="sort" value="{{sort}}">
+</form>
+<div class="flex">
+    {{#each productos}}
+        <div class="producto">
+            <p><strong>Nombre: </strong>{{this.nombreProducto}} </p>
+            <p><strong>Precio: </strong>{{this.precioProducto}}</p>
+            <p><strong>Codigo: </strong>{{this.codigoProducto}}</p>
+            <p><strong>Descripcion: </strong>{{this.descripcionProducto}}</p>
+            <input type="button" value="Agregar al carrito">
+        </div>
+    {{/each}}
+</div>
+
+<!-- Controles de Paginación -->
+<div class="pagination">
+    {{#if hasPrevPage}}
+        <a href="/productos?pageNum={{prevPage}}&limit={{limit}}&sort={{sort}}&search={{search}}">Anterior</a>
+    {{/if}}
+
+    Página {{page}}
+
+    {{#if hasNextPage}}
+        <a href="/productos?pageNum={{nextPage}}&limit={{limit}}&sort={{sort}}&search={{search}}">Siguiente</a>
+    {{/if}}
+</div>
+
+<!-- Controles de Ordenamiento -->
+<div class="sort-controls">
+      <a href="/productos?pageNum=1&limit={{limit}}&sort=asc&search={{search}}">Ordenar por precio ascendente</a>
+    <a href="/productos?pageNum=1&limit={{limit}}&sort=desc&search={{search}}">Ordenar por precio descendente</a>
+</div>
+
+<script src="/assets/js/index.js"></script>

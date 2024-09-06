@@ -1,0 +1,12 @@
+<h1>Carrito</h1>
+
+<div class="flex">
+    {{#each cart.products}}
+        <div class="carrito">
+            <p><strong>Producto:</strong> {{this.product.nombreProducto}}</p>
+            <p><strong>Precio:</strong> {{this.product.precioProducto}}</p>
+            <p><strong>Cantidad:</strong> {{this.quantity}}</p>
+        </div>
+    {{/each}}
+</div>
+<script src="/assets/js/index.js"></script>

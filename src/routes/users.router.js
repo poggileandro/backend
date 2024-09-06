@@ -1,100 +1,77 @@
 const { Router } = require('express');
 const fs = require('fs');
 const path = require('path');
-
+const { usersManagerMongo } = require('../manager/users.Manager.mongo');
 const router = Router();
 
-//creo la clase de productos
+const usersService  = new usersManagerMongo()
 
-class users {
-    constructor(id, nombre, apellido) {
-        this.id = id;
-        this.nombre = nombre;
-        this.apellido = apellido;    
-    }
-}
-//el array que voy a guardar los productos y que voy a mostrar
-let usuarios = [];
-
-// Leer productos del archivo JSON 
-const readUsuariosFromFile = () => {
-    try {
-        const data = fs.readFileSync(path.join(__dirname, '../usuarios.json'), 'utf8');
-        usuarios = JSON.parse(data);
-    } catch (err) {
-        usuarios= [];
-    }
-};
-
-// Escribir productos al archivo JSON
-const writeUsuariosToFile = () => {
-    fs.writeFileSync(path.join(__dirname, '../usuarios.json'), JSON.stringify(usuarios, null, 4));
-};
-//leo el archivo al iniciar 
-readUsuariosFromFile();
 
 //obtener todos los usuarios
-router.get('/', (req, res) => {
-    res.send({ data: usuarios });
+router.get('/', async (req, res) => {
+    try{
+        const users = await usersService.getUsers()
+        res.send({status:'success', payload: {users} })
+    }catch (error){
+         console.log(error)
+    }
 });
 
-
 //obtener un usuario por id
-router.get('/:uid', (req, res) => {
+router.get('/:uid', async (req, res) => {
     const {uid} = req.params;
-    let ususarioAMostrar ;
-
-    ususarioAMostrar = usuarios.find((user)=>user.id === parseInt(uid ));
-
-    if (!ususarioAMostrar) {
-        return res.status(404).send({ status: 'error', error: 'No existe ese ID' });
+    try{
+        const ususarioAMostrar = await usersService.getUser(uid)
+        res.send({status:'success', payload: ususarioAMostrar})
     }
-    res.send({ data: ususarioAMostrar });
+    catch(error){
+        console.log(error)
+    }   
 });
 
 
 //cargar 1 usuario nuevo
-router.post('/', (req, res) => {
-    const { body } = req;
-
-    if (!body.nombre || !body.apellido) {
-        return res.status(400).send({ status: 'error', error: 'faltan datos' });
+router.post('/', async(req, res) => {
+    try{
+        const { body } = req
+        //Se pueden poner mas validaciones
+        //verificamos que no sean null ni undefined
+        if (!body.first_name || !body.email) {
+            return res.status(400).send({ status: 'error', error: 'faltan datos' });
+        }
+        const result = await usersService.createUser(body);
+        res.status(200).send({ data: result });
+    }catch(error){
+      console.log(error)
     }
-    const nuevoUsuario = new users(
-        usuarios.length + 1,
-        body.nombre,
-        body.apellido
-        );
-    usuarios.push(nuevoUsuario);
-    writeUsuariosToFile();
-    res.status(200).send({ data: usuarios });
 });
 
 //editar de a un Usuarios
-router.put('/:uid', (req, res) => {
+router.put('/:uid', async (req, res) => {
     const { uid } = req.params;
-    const { body } = req;
-
-    const usuarioIndex = usuarios.findIndex(usuario => usuario.id === parseInt(uid));
-    
-    if (usuarioIndex === -1) {
-        return res.status(404).send({ status: 'error', error: 'usuario no encontrado' });
+    try{
+    let UsersToReplace  = req.body
+    if (!UsersToReplace.first_name || !UsersToReplace.email) {
+        return res.status(400).send({ status: 'error', error: 'faltan datos' });
     }
-
-    const usuarioActualizado = { ...usuarios[usuarioIndex], ...body };
-    usuarios[usuarioIndex] = usuarioActualizado;
-    writeUsuariosToFile();
-
-    res.status(200).send({ data: usuarioActualizado });
+    const result = await usersService.updateUser({_id:uid} , UsersToReplace);
+    res.status(200).send({status:'success', message:"usuario actualizado"});
+    }catch(error){
+        console.log(error)
+    }
 });
 
 
-//eliminar un producto
-router.delete('/:uid', (req, res) => {
+//eliminar un User
+router.delete('/:uid', async (req, res) => {
     const { uid } = req.params;
-    usuarios = usuarios.filter(usuario => usuario.id !== parseInt(uid));
-    writeUsuariosToFile();
-    res.send({ data: usuarios });
+    try{
+        const result = await usersService.deleteUser({_id:uid})
+        res.send({ status: 'success', message:'usuario borrado' });
+    }
+    catch(error){
+      console.log(error)
+    }
 });
 
 module.exports = router;
