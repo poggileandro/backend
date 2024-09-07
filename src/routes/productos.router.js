@@ -41,7 +41,7 @@ readProductosFromFile();
 //obtener todos los productos 
 router.get('/', async (req, res) => {
     try{
-        const products =await productService.getProducts();
+        const products =await productService.getProducts({limit : undefined});
         res.send({status:'success', payload: {products}})
     }catch(error){
         console.log(error)
@@ -61,6 +61,9 @@ router.get('/:pid', async(req, res) => {
       console.log(error)
     }
 });
+
+
+
 
 //cargar 1 producto nuevo
 router.post('/', async(req, res) => {

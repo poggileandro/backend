@@ -14,10 +14,16 @@ router.get('/realtimeproducts',(req,res)=>{
 
 router.get('/productos', async (req, res) => {
     const productoService = new productManagerMongo();
-    const { limit, pageNum, sort= '' , search = ''} = req.query;
+
+    // Asegúrate de que req.query siempre esté definido
+    const { limit, pageNum, sort = '', search = '' } = req.query || {};
+
+    // Usa valores predeterminados para limit y pageNum si no están presentes
+    const limitValue = limit != null ? parseInt(limit, 10) : 10; // Usa 10 si limit es null o undefined
+    const pageNumValue = pageNum != null ? parseInt(pageNum, 10) : 1; // Usa 1 si pageNum es null o undefined
 
     try {
-        // Llamar a getProducts incluyendo sort, limit , pageNum y search
+        // Llamar a getProducts incluyendo sort, limit, pageNum y search
         const {
             docs,
             hasPrevPage,
@@ -26,10 +32,10 @@ router.get('/productos', async (req, res) => {
             nextPage,
             page
         } = await productoService.getProducts({
-            limit: parseInt(limit),
-            page: parseInt(pageNum),
+            limit: limitValue,
+            page: pageNumValue,
             sort: sort,
-            search : search
+            search: search
         });
 
         res.render('productos.handlebars', {
@@ -39,9 +45,9 @@ router.get('/productos', async (req, res) => {
             prevPage,
             nextPage,
             page,
-            limit,
-            sort, 
-            search :''
+            limit: limitValue,
+            sort,
+            search
         });
 
     } catch (error) {
@@ -50,12 +56,18 @@ router.get('/productos', async (req, res) => {
     }
 });
 
+
+
+
+
 router.get('/cart/:cid', async (req, res) => {
     const { cid } = req.params;
     const cartService = new cartsManagerMongo();
 
     try {
         let docs = await cartService.getCart2(cid);
+        
+
         if (!docs) {
             return res.status(404).send({ status: 'error', message: 'Carrito no encontrado' });
         }
