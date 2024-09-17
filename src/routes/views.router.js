@@ -66,6 +66,8 @@ router.get('/cart/:cid', async (req, res) => {
 
     try {
         let docs = await cartService.getCart2(cid);
+        let plainDocs = docs.toObject ? docs.toObject() : docs;
+
         
 
         if (!docs) {
@@ -73,8 +75,10 @@ router.get('/cart/:cid', async (req, res) => {
         }
 
         res.render('carts.handlebars', {
-            cart: docs // Envía el carrito completo, que incluye los productos poblados
+            cart: plainDocs // Envía el carrito completo, que incluye los productos poblados
+            
         });
+        console.log(docs)
 
     } catch (error) {
         console.error('Error al obtener el carrito:', error);
