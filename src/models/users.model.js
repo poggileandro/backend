@@ -5,7 +5,6 @@ const UsersCollection  = 'Users'
 const UsersSchema  = new Schema({
     first_name: {
         type: String,
-        required:true
     },
     last_name:String,
     
@@ -13,6 +12,15 @@ const UsersSchema  = new Schema({
         type:String,
         required:true,
         unique:true
+    },
+    password:{
+        type:String,
+        required:true
+    },
+    role:{
+        type:String,
+        enum:['user','admin'],
+        default:'user'
     }
 });
 const userModel = model(UsersCollection , UsersSchema) 

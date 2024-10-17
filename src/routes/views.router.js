@@ -11,6 +11,17 @@ router.get('/realtimeproducts',(req,res)=>{
     })
 })
 
+router.get('/register', (req,res)=>{
+    res.render('register.handlebars')
+})
+
+router.get('/login', (req,res)=>{
+    res.render('login.handlebars')
+})
+router.get('/cambiarcontra', (req,res)=>{
+    res.render('cambiarContra.handlebars')
+})
+
 
 router.get('/productos', async (req, res) => {
     const productoService = new productManagerMongo();
