@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const fs = require('fs');
 const path = require('path');
-const { productManagerMongo } = require('../manager/products.Manager.mongo');
+const { productManagerMongo } = require('../Dao/products.Manager.mongo');
 
 const router = Router();
 const productService = new productManagerMongo();

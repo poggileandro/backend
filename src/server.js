@@ -11,7 +11,7 @@ const { Uploader }  = require('./utils/multer.js');
 const handlebars    = require('express-handlebars');
 const { Server }    = require('socket.io');
 const fs            = require('fs');
-const { connectDB } = require('./config/index.js');
+const { connectDB, configObject } = require('./config/index.js');
 const cookieParser  = require('cookie-parser')
 const session       = require('express-session')
 //session file
@@ -20,9 +20,11 @@ const mongoStore    = require('connect-mongo')
 //passport
 const passport      = require('passport')
 const {initializePassport} = require('./config/passport.config.js')
+const cors  = require('cors')
+
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = configObject.port
 
 // Proceso JSON del cliente
 app.use(express.json());
@@ -31,6 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 // Servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
+app.use(cors())
 
 // Configuración de plantillas
 app.engine('handlebars', handlebars.engine());
@@ -39,23 +42,6 @@ app.set('view engine', 'handlebars');
 //palabra secreta cookie parser 
 app.use(cookieParser('palabrasecreta'))
 
-
-
-// config de session en memoria
-//para archivos
-
-//const fileStore = new FileStore(session)
-
-//app.use(session({
-   // store: new fileStore({
-      //   path:'./session',
-       //  ttl:10,
-       //  retire:0
-  //  }),
-   // secret: 'secretcoder',
-   // resave:true,
-   // saveUninitialized:  true
-//}))
 
 
 // session + dbMongo

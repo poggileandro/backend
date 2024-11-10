@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+const { configObject } = require('../config');
 
-const PRIVATE_KEY = 'CoderKeySecret@para-la-firma'
+const PRIVATE_KEY = configObject.private_key
 
 const generateToken = (user)=>{return jwt.sign(user,PRIVATE_KEY,{expiresIn:'1d'})}
 
@@ -17,7 +18,7 @@ const authTokenMiddleware = (req,res,next)=>{
         next()
     })
     
-      
+    
 }
 
 module.exports = {

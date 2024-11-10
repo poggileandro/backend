@@ -3,7 +3,7 @@ const passportlocal = require('passport-local')
 const jwt           = require('passport-jwt')
 const {PRIVATE_KEY}            = require('../utils/jsonwebtoken.js')
 
-const {usersManagerMongo}  = require('../manager/users.Manager.mongo.js')
+const {usersDaoMongo}  = require('../Dao/users.Dao.mongo.js')
 const {createHash , isValidPassword} = require('../utils/bcrypt.js')
 
 const localStrategy  = passportlocal.Strategy
@@ -11,7 +11,7 @@ const JWTStrategy    = jwt.Strategy
 const ExtractJWT       = jwt.ExtractJwt
 
 
-const userService  = new usersManagerMongo()
+const userService  = new usersDaoMongo()
 
 const initializePassport = () =>{
 

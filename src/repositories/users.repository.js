@@ -1,0 +1,16 @@
+class UserRepository {
+
+    constructor(dao){
+        this.dao = dao
+    }
+    getUsers  = async () => await this.dao.get()
+    getUser   = async filter => await this.dao.getBy(filter)
+    createUser = async newUser => await this.dao.create(newUser) 
+    deleteUser = async userToDelete => await this.dao.deleteOne(userToDelete);
+    updateUser = async (id,userToUpdate) => await this.dao.updateOne(id, userToUpdate);
+}
+
+// este clase maneja el dao y dto
+
+module.exports = 
+    UserRepository

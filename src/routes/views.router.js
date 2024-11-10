@@ -1,8 +1,8 @@
 const { Router } = require('express');
 const fs = require('fs');
 const path = require('path');
-const { productManagerMongo } = require('../manager/products.Manager.mongo');
-const { cartsManagerMongo } = require('../manager/carts.Manager.mongo');
+const { productManagerMongo } = require('../Dao/products.Manager.mongo');
+const { cartsManagerMongo } = require('../Dao/carts.Manager.mongo');
 const router = Router();
 
 router.get('/realtimeproducts',(req,res)=>{
