@@ -6,7 +6,7 @@ const {productController} = require('../controllers/products.controller');
 
 const {getProductsPaginated} = new productController();
 
-const { cartsManagerMongo } = require('../Dao/carts.Manager.mongo');
+const { cartsManagerMongo } = require('../Dao/carts.Dao.mongo');
 const router = Router();
 
 router.get('/realtimeproducts',(req,res)=>{
@@ -37,8 +37,6 @@ router.get('/productos', async (req, res) => {
           sort,
           search
         };
-    
-        console.log("Opciones pasadas a getProductsPaginated:", options);
     
         const productos = await getProductsPaginated(options);
     

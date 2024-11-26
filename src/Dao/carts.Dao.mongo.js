@@ -1,7 +1,7 @@
 const { cartModel } = require("../models/cart.model");
 
 
-class cartsManagerMongo{
+class cartDaoMongo{
     constructor(){
         this.model= cartModel
     }
@@ -20,5 +20,5 @@ class cartsManagerMongo{
 }
 
 module.exports= {
-    cartsManagerMongo
+    cartDaoMongo
 }
