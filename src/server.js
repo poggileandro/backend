@@ -1,6 +1,6 @@
 const express       = require('express');
 const path          = require('path');
-const {router:productRouter,readProductosFromFile,writeProductosToFile,productos} = require('./routes/productos.router.js');
+const productRouter = require('./routes/productos.router.js');
 const cartRouter    = require('./routes/carts.router.js');
 const userRouter    = require('./routes/users.router.js');
 const viewsRouter   = require('./routes/views.router.js');
@@ -75,7 +75,7 @@ app.use('/api/sessions' , sessionsRouter)
 app.use('/', viewsRouter);
 
 // Leer productos del archivo JSON 
-readProductosFromFile();
+
 // Configuración de Socket.IO
 const io = new Server(app.listen(PORT, () => {
     console.log(`Servidor escuchando en puerto ${PORT}`);

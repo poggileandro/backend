@@ -2,11 +2,11 @@ const { Router } = require('express');
 const fs = require('fs');
 const path = require('path');
 const { cartsManagerMongo } = require('../Dao/carts.Manager.mongo');
-const { productManagerMongo } = require('../Dao/products.Manager.mongo');
+const { productDaoMongo } = require('../Dao/products.Dao.mongo');
 const router = Router();
 
 const cartService = new cartsManagerMongo();
-const productsService = new productManagerMongo();
+const productsService = new productDaoMongo();
 
 
 //todos los carritos

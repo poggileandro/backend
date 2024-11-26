@@ -1,7 +1,11 @@
 const { Router } = require('express');
 const fs = require('fs');
 const path = require('path');
-const { productManagerMongo } = require('../Dao/products.Manager.mongo');
+
+const {productController} = require('../controllers/products.controller');
+
+const {getProductsPaginated} = new productController();
+
 const { cartsManagerMongo } = require('../Dao/carts.Manager.mongo');
 const router = Router();
 
@@ -24,50 +28,37 @@ router.get('/cambiarcontra', (req,res)=>{
 
 
 router.get('/productos', async (req, res) => {
-    const productoService = new productManagerMongo();
-
-    // Asegúrate de que req.query siempre esté definido
-    const { limit, pageNum, sort = '', search = '' } = req.query || {};
-
-    // Usa valores predeterminados para limit y pageNum si no están presentes
-    const limitValue = limit != null ? parseInt(limit, 10) : 10; // Usa 10 si limit es null o undefined
-    const pageNumValue = pageNum != null ? parseInt(pageNum, 10) : 1; // Usa 1 si pageNum es null o undefined
-
     try {
-        // Llamar a getProducts incluyendo sort, limit, pageNum y search
-        const {
-            docs,
-            hasPrevPage,
-            hasNextPage,
-            prevPage,
-            nextPage,
-            page
-        } = await productoService.getProducts({
-            limit: limitValue,
-            page: pageNumValue,
-            sort: sort,
-            search: search
-        });
-
+        const { limit = 10, pageNum = 1, sort = '', search = '' } = req.query;
+    
+        const options = {
+          limit: parseInt(limit, 10),
+          page: parseInt(pageNum, 10),
+          sort,
+          search
+        };
+    
+        console.log("Opciones pasadas a getProductsPaginated:", options);
+    
+        const productos = await getProductsPaginated(options);
+    
         res.render('productos.handlebars', {
-            productos: docs,
-            hasPrevPage,
-            hasNextPage,
-            prevPage,
-            nextPage,
-            page,
-            limit: limitValue,
-            sort,
-            search
+          productos: productos.docs,
+          hasPrevPage: productos.hasPrevPage,
+          hasNextPage: productos.hasNextPage,
+          prevPage: productos.prevPage,
+          nextPage: productos.nextPage,
+          page: productos.page,
+          totalPages: productos.totalPages,
+          limit: parseInt(limit, 10),
+          sort,
+          search
         });
-
-    } catch (error) {
-        console.log(error);
+      } catch (error) {
+        console.error("Error en la ruta /productos:", error.message);
         res.status(500).send("Error interno del servidor");
-    }
-});
-
-
+      }
+  });
 
 
 
