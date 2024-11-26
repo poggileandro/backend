@@ -51,7 +51,7 @@ class CartController {
   
     try {
       const cart = await this.cartService.getCart(id);
-      cart.products.push({ product: pid, quantity });
+      cart.products.push({ product: {_id: pid}, quantity });
       const newCart = await this.cartService.addProductToCart(id, cart);
       res.status(201).send({ status: 'success', payload: newCart });
     } catch (error) {
