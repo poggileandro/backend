@@ -16,7 +16,19 @@ class cartDaoMongo{
     createCart = async (productos , newCart) => await this.model.create(productos , newCart);
     deleteCart = async cartToDelete => await this.model.deleteOne(cartToDelete);
     updateCart = async (id,cartToUpdate) => await this.model.updateOne(id, cartToUpdate);
-    addProductToCart = async (id ,cartToUpdate) => await this.model.findByIdAndUpdate(id, cartToUpdate)
+    addProductToCart = async (id ,cartToUpdate) => await this.model.findByIdAndUpdate(id, cartToUpdate);
+    emptyCart = async (cartId) => {
+        try {
+          const cart = await this.model.findById(cartId);
+          cart.products = [];
+          await cart.save();
+          return true;
+        } catch (error) {
+          console.error(error);
+          return false;
+        }
+      };
+    
 }
 
 module.exports= {

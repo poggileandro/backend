@@ -1,8 +1,10 @@
-const { cartService } = require('../service');
+const { cartService, productService } = require('../service');
+const {ObjectId} = require('mongoose')
 
 class CartController {
   constructor() {
     this.cartService = cartService;
+    this.productService = productService
   }
 
 
@@ -51,7 +53,8 @@ class CartController {
   
     try {
       const cart = await this.cartService.getCart(id);
-      cart.products.push({ product: {_id: pid}, quantity });
+      const product =  await this.productService.getProduct(pid)
+      cart.products.push({product: product._id ,quantity : quantity});
       const newCart = await this.cartService.addProductToCart(id, cart);
       res.status(201).send({ status: 'success', payload: newCart });
     } catch (error) {
@@ -59,7 +62,6 @@ class CartController {
       res.status(500).send({ status: 'error', message: 'Error al agregar prod a el carrito' });
     }
   };
-
   // Actualizar un carrito completo
   updateCart  =  async (req, res) => {
     const { id } = req.params;
@@ -84,6 +86,37 @@ class CartController {
       res.status(500).send({ status: 'error', message: 'Error al eliminar el carrito' });
     }
   }
+
+  //comprar carrito
+  comprarCart = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const cart = await this.cartService.getCart(id);
+      const productos = cart.products;
+    
+      for (const producto of productos) {
+        console.log(producto.id)
+        const productoDB = await this.productService.getProduct(producto.product);
+        if (!productoDB) {
+          throw new Error(`Producto no encontrado`);
+        }
+
+        if (productoDB.stockProducto <= 0) {
+          throw new Error(`No hay stock suficiente del producto ${productoDB.nombre}`);
+        }
+        // Restar la cantidad vendida del stock
+        productoDB.stockProducto -= producto.quantity;
+        console.log("producto db",productoDB)
+        await this.productService.updateProduct(producto.product,productoDB);
+        await this.cartService.emptyCart(id);
+      }
+      
+      res.status(200).send({ status: 'success', message: 'Carrito comprado con éxito' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ status: 'error', message: 'Error al Comprar el carrito' });
+    }
+  };
 
   // Eliminar un producto de un carrito
   deleteProductFromCart = async (req, res) => {
