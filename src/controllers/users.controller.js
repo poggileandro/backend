@@ -26,17 +26,30 @@ class userController{
         }   
     }
 
+ //Traer 1 usuario email
+ getUsuario = async (req, res) => {
+    const  {email}  = req;
+    console.log(email)
+    try {
+      const usuarioAMostrar = await this.userService.getUsuario( {email} );
+      //res.send({ status: 'success', payload: usuarioAMostrar });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
     //Crear 1 Usuario
     createUsers =  async(req, res) => {
         try{
-            const { body } = req
+            const  body  = req
             //Se pueden poner mas validaciones
             //verificamos que no sean null ni undefined
             if (!body.first_name || !body.email) {
                 return res.status(400).send({ status: 'error', error: 'faltan datos' });
             }
             const result = await this.userService.createUser(body);
-            res.status(200).send({ data: result });
+            //res.status(200).send({ data: result });
         }catch(error){
           console.log(error)
         }
@@ -51,7 +64,7 @@ class userController{
             return res.status(400).send({ status: 'error', error: 'faltan datos' });
         }
         const result = await userService.updateUser({_id:uid} , UsersToReplace);
-        res.status(200).send({status:'success', message:"usuario actualizado"});
+      res.status(200).send({status:'success', message:"usuario actualizado"});
         }catch(error){
             console.log(error)
         }
