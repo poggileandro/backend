@@ -16,10 +16,10 @@ class userController{
     
     //Traer 1 usuario
     getUser = async (req, res) => {
-        const {uid} = req.params;
         try{
-            const ususarioAMostrar = await this.userService.getUser(uid)
-            res.send({status:'success', payload: ususarioAMostrar})
+            const {email} = req;
+            const ususarioAMostrar = await this.userService.getUser({email})
+            return ususarioAMostrar
         }
         catch(error){
             console.log(error)
@@ -28,11 +28,10 @@ class userController{
 
  //Traer 1 usuario email
  getUsuario = async (req, res) => {
-    const  {email}  = req;
-    console.log(email)
     try {
+      const  {email}  = req;
       const usuarioAMostrar = await this.userService.getUsuario( {email} );
-      //res.send({ status: 'success', payload: usuarioAMostrar });
+      return usuarioAMostrar
     } catch (error) {
       console.log(error);
     }
@@ -43,13 +42,12 @@ class userController{
     createUsers =  async(req, res) => {
         try{
             const  body  = req
-            //Se pueden poner mas validaciones
-            //verificamos que no sean null ni undefined
             if (!body.first_name || !body.email) {
                 return res.status(400).send({ status: 'error', error: 'faltan datos' });
             }
             const result = await this.userService.createUser(body);
-            //res.status(200).send({ data: result });
+            console.log(result)
+            return result 
         }catch(error){
           console.log(error)
         }

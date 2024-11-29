@@ -7,7 +7,7 @@ class usersDaoMongo{
         this.model = userModel
     }
     get = async () => await this.model.find();
-    getUser = async userId  => await this.model.findById(userId);
+    getUser = async filter  => await this.model.findOne(filter);
     getUsuario  = async email => await this.model.findOne(email);
     create = async newUser => await this.model.create(newUser);
     delete = async userToDelete => await this.model.deleteOne(userToDelete);

@@ -43,26 +43,18 @@ router.post('/register',async (req,res)=>{
      //LOGIN-----------------------           
                 
     router.post('/login', async(req,res)=>{
-     const {email,password}  =  req.body
-                    
+     const {email,password}  =  req.body       
     const userFound = await getUser({email});
                     
     if(!userFound ){
               return res.send({status :'error' , error: 'no existe ese usuario'})
         }
-           //     if(userFound.email !== email || userFound.password !== password){
-              // return res.send({status :'error' , error: 'no coinciden los datos o no existe ese usuario'})
-                 // }
+       
                             
         if(userFound.email !== email || !isValidPassword(password,userFound.password)){
             return res.send({status :'error' , error: 'no coinciden los datos '})
                   }
-                                
-                //    req.session.user = {
-                //     email,
-                //     role: userFound.role === 'admin',
-                //              }
-
+         
                 const token = generateToken({id:userFound._id , role:userFound.role, first_name:userFound.first_name }) //aca se pasan los datos que quiero mostrar 
                 
                  res.cookie('token',token,{
