@@ -21,16 +21,16 @@ class CartController {
 
   // Obtener un carrito por ID
   getCart  =  async (req, res) => {
-    const { id } = req.params;
+    const  cid  = req;
     try {
-      const cart = await this.cartService.getCart(id);
-      if (!cart) {
-        return res.status(404).send({ status: 'error', message: 'Carrito no encontrado' });
+      const cart = await this.cartService.getCart(cid);
+      if (cart) {
+        return  cart;
       }
-      res.send({ status: 'success', payload: cart });
+      //res.send({ status: 'success', payload: cart });
     } catch (error) {
       console.error(error);
-      res.status(500).send({ status: 'error', message: 'Error al obtener el carrito' });
+      //res.status(500).send({ status: 'error', message: 'Error al obtener el carrito' });
     }
   }
 

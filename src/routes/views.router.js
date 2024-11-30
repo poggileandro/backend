@@ -6,7 +6,9 @@ const {productController} = require('../controllers/products.controller');
 
 const {getProductsPaginated} = new productController();
 
-const { cartsManagerMongo } = require('../Dao/carts.Dao.mongo');
+const { CartController } = require('../controllers/cart.controller');
+
+const {getCart} = new CartController
 const router = Router();
 
 router.get('/realtimeproducts',(req,res)=>{
@@ -61,14 +63,12 @@ router.get('/productos', async (req, res) => {
 
 
 router.get('/cart/:cid', async (req, res) => {
-    const { cid } = req.params;
-    const cartService = new cartsManagerMongo();
-
+    
     try {
-        let docs = await cartService.getCart2(cid);
-        let plainDocs = docs.toObject ? docs.toObject() : docs;
-
-        
+        const { cid } = req.params;
+        let docs = await getCart(cid);
+        console.log(docs)
+        let plainDocs = docs.toObject() ? docs.toObject() : docs;
 
         if (!docs) {
             return res.status(404).send({ status: 'error', message: 'Carrito no encontrado' });
@@ -78,7 +78,6 @@ router.get('/cart/:cid', async (req, res) => {
             cart: plainDocs // Envía el carrito completo, que incluye los productos poblados
             
         });
-        console.log(docs)
 
     } catch (error) {
         console.error('Error al obtener el carrito:', error);

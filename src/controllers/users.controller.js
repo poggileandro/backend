@@ -46,7 +46,6 @@ class userController{
                 return res.status(400).send({ status: 'error', error: 'faltan datos' });
             }
             const result = await this.userService.createUser(body);
-            console.log(result)
             return result 
         }catch(error){
           console.log(error)

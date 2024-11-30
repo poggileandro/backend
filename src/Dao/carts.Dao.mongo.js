@@ -7,7 +7,7 @@ class cartDaoMongo{
     }
 
     getCarts = async () => await this.model.find();
-    getCart = async cartId  => await this.model.findById(cartId);
+    getCart = async cartId  => {return await this.model.findById({ _id: cartId }).populate('products.product')};
     getCart2 = async cartId => {
         return await this.model
             .findOne({ _id: cartId })
