@@ -21,6 +21,7 @@ const mongoStore    = require('connect-mongo')
 const passport      = require('passport')
 const {initializePassport} = require('./config/passport.config.js')
 const cors  = require('cors')
+const {productService} = require('./service/index.js')
 
 
 const app = express();
@@ -81,17 +82,59 @@ const io = new Server(app.listen(PORT, () => {
     console.log(`Servidor escuchando en puerto ${PORT}`);
 }));
 
+const productSocket  = (io)=>{
+    io.on('connection', async socket =>{
+        console.log('nuevo cliente conectado')
+
+        const products = await productService.getProducts();
+        socket.emit('lista',products);
+
+        socket.on('addProduct', async data =>{
+            console.log('data que llega:',data)
+        await productService.createProduct(data) 
+        console.log("Datos recibidos del cliente:", data);           
+        })
+    })
+
+}
+
+productSocket(io);
+
+/*
 io.on('connection', (socket) => {
     console.log("Cliente conectado");
-
     // Enviar la lista de productos al nuevo cliente
-    socket.emit('productosActualizados', productos);
-    // Manejar el evento 'nuevoProducto'
-    socket.on('nuevoProducto', (data) => {
-        console.log('Nuevo producto recibido:', data);
-        productos.push(data);
-        writeProductosToFile(productos);
-        io.emit('productosActualizados', productos);
+    productService.getProducts()
+    .then((productos) => {
+        console.log(productos)
+        socket.emit('lista', productos);
+    })
+    .catch((error) => {
+        console.error("Error al obtener productos al conectar:", error);
     });
-});
+
+    /*
+    socket.on('nuevoProducto', async (data) => {
+        try {
+            console.log('Nuevo producto recibido:', data);
+            // Validar el producto antes de crearlo
+            if (!data.nombre || !data.precio) {
+                socket.emit('error', { message: "Datos incompletos para crear el producto." });
+                return;
+            }
+            // Crear el producto usando el servicio
+            const nuevoProducto = await productService.createProduct(data);
+
+            // Obtener la lista actualizada de productos y enviarla a todos los clientes
+            const productosActualizados = await productService.getProducts();
+            console.log('hola',productosActualizados)
+           
+            io.emit('productosActualizados', productosActualizados);
+        } catch (error) {
+            console.error("Error al manejar 'nuevoProducto':", error);
+            socket.emit('error', { message: "Error al crear el producto." });
+        }
+    });   
+});*/
+
 

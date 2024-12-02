@@ -1,4 +1,4 @@
-<form method="get" id="productoForm">
+<form method="get" id ="product-Form">
     <h1>Productos en tiempo Real</h1>
     <div>
         <p>Ingrese Nombre del producto:</p>
@@ -24,7 +24,7 @@
         <p>Ingrese Código:</p>
         <input type="text" name="codigo">
     </div>
-    <button type="submit" >Enviar</button>
+    <button type="submit"class="btn btn-outline-dark">enviar</button>
 </form>
 
 <ul id="lista">
@@ -32,4 +32,61 @@
 </ul>
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="/assets/js/index.js"></script>
+<script>
+    const socket = io()
+    socket.on('lista', data => {
+        console.log(data)
+        const productListDiv = document.querySelector('#lista')
+        let html = ''
+
+        data.forEach(product => {
+            html += `
+                <div class='card w-25'>
+                    <div class='card-body'>
+                        <p>Nombre: ${product.nombreProducto}</p>
+                        <p>Descripción: ${product.descripcionProducto}</p>
+                        <p>Stock: ${product.stockProducto}</p>
+                        <p>Precio: ${product.precioProducto}</p>
+                    </div>
+                    <div class='card-footer'>
+                        <button class='btn btn-outline-dark w-100' id='${product.id}'  '>Eliminar</button>
+                    </div>
+                </div>
+            `
+        })
+        productListDiv.innerHTML = html
+    })
+    
+let form = document.querySelector('#product-Form');
+form.addEventListener('submit', evt => {
+    evt.preventDefault();
+    
+    // Accede a los valores de los campos correctamente
+    const nombreProducto = form.elements.nombre.value;
+    const precioProducto = form.elements.precio.value;
+    const descripcionProducto= form.elements.descripcion.value;
+    const stockProducto = form.elements.stock.value;
+    const categoriaProducto = form.elements.categoria.value;
+    const codigoProducto = form.elements.codigo.value;
+
+    const productData = {
+        nombreProducto,
+        precioProducto: Number(precioProducto),
+        descripcionProducto,
+        stockProducto: parseInt(stockProducto,10),
+        categoriaProducto,
+        codigoProducto
+    };
+
+    socket.emit('addProduct', productData);
+    form.reset();
+});
+
+// Agregar eventos a todos los botones
+let botones = document.querySelectorAll('button');
+botones.forEach(boton => {
+    boton.addEventListener('click', evt => {
+        console.log("ID del botón:", boton.id);
+    });
+});
+</script>
