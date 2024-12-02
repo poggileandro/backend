@@ -2,27 +2,27 @@
     <h1>Productos en tiempo Real</h1>
     <div>
         <p>Ingrese Nombre del producto:</p>
-        <input type="text" name="nombre">
+        <input type="text" name="nombre"  >
     </div>
     <div>
         <p>Ingrese Precio:</p>
-        <input type="number" name="precio">
+        <input  type="number" name="precio" >
     </div>
     <div>
         <p>Ingrese Descripción:</p>
-        <input type="text" name="descripcion">
+        <input type="text" name="descripcion" >
     </div>
     <div>
         <p>Ingrese Stock:</p>
-        <input type="number" name="stock">
+        <input type="number" name="stock" >
     </div>
     <div>
         <p>Ingrese Categoría:</p>
-        <input type="text" name="categoria">
+        <input type="text" name="categoria" >
     </div>
     <div style="padding-bottom: 10px;">
         <p>Ingrese Código:</p>
-        <input type="text" name="codigo">
+        <input type="text" name="codigo" >
     </div>
     <button type="submit"class="btn btn-outline-dark">enviar</button>
 </form>
@@ -62,12 +62,19 @@ form.addEventListener('submit', evt => {
     evt.preventDefault();
     
     // Accede a los valores de los campos correctamente
-    const nombreProducto = form.elements.nombre.value;
-    const precioProducto = form.elements.precio.value;
-    const descripcionProducto= form.elements.descripcion.value;
-    const stockProducto = form.elements.stock.value;
-    const categoriaProducto = form.elements.categoria.value;
-    const codigoProducto = form.elements.codigo.value;
+    const nombreProducto = form.elements.nombre.value.trim();
+    const precioProducto = form.elements.precio.value.trim();
+    const descripcionProducto = form.elements.descripcion.value.trim();
+    const stockProducto = form.elements.stock.value.trim();
+    const categoriaProducto = form.elements.categoria.value.trim();
+    const codigoProducto = form.elements.codigo.value.trim();
+
+      if (!nombreProducto ||!precioProducto ||!descripcionProducto ||!stockProducto ||!categoriaProducto ||!codigoProducto){
+        console.error("Todos los campos son obligatorios");
+        alert("Por favor, completa todos los campos del formulario.");
+        form.reset();
+        return; // Salir de la función si falta algún campo
+    }
 
     const productData = {
         nombreProducto,
@@ -76,8 +83,8 @@ form.addEventListener('submit', evt => {
         stockProducto: parseInt(stockProducto,10),
         categoriaProducto,
         codigoProducto
-    };
-
+    }
+    
     socket.emit('addProduct', productData);
     form.reset();
 });

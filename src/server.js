@@ -90,8 +90,8 @@ const productSocket  = (io)=>{
         socket.emit('lista',products);
 
         socket.on('addProduct', async data =>{
-            console.log('data que llega:',data)
         await productService.createProduct(data) 
+        console.log(data.nombreProducto)
         console.log("Datos recibidos del cliente:", data);           
         })
     })
