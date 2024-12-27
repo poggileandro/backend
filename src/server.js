@@ -5,7 +5,8 @@ const cartRouter    = require('./routes/carts.router.js');
 const userRouter    = require('./routes/users.router.js');
 const viewsRouter   = require('./routes/views.router.js');
 const pruebasRouter = require('./routes/pruebas.router.js');
-const sessionsRouter = require('./routes/sessions.router.js')
+const sessionsRouter= require('./routes/sessions.router.js');
+const mocksRouter   = require('./routes/mocks.router.js')
 const logger        = require('morgan');
 const { Uploader }  = require('./utils/multer.js');
 const handlebars    = require('express-handlebars');
@@ -72,7 +73,8 @@ app.use('/api/productos', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/pruebas',pruebasRouter);
-app.use('/api/sessions' , sessionsRouter)
+app.use('/api/sessions' , sessionsRouter);
+app.use('/api/mocks', mocksRouter)
 app.use('/', viewsRouter);
 
 // Leer productos del archivo JSON 
@@ -91,50 +93,12 @@ const productSocket  = (io)=>{
 
         socket.on('addProduct', async data =>{
         await productService.createProduct(data) 
-        console.log(data.nombreProducto)
-        console.log("Datos recibidos del cliente:", data);           
+        console.log(data.nombreProducto)           
         })
     })
-
 }
 
 productSocket(io);
 
-/*
-io.on('connection', (socket) => {
-    console.log("Cliente conectado");
-    // Enviar la lista de productos al nuevo cliente
-    productService.getProducts()
-    .then((productos) => {
-        console.log(productos)
-        socket.emit('lista', productos);
-    })
-    .catch((error) => {
-        console.error("Error al obtener productos al conectar:", error);
-    });
-
-    /*
-    socket.on('nuevoProducto', async (data) => {
-        try {
-            console.log('Nuevo producto recibido:', data);
-            // Validar el producto antes de crearlo
-            if (!data.nombre || !data.precio) {
-                socket.emit('error', { message: "Datos incompletos para crear el producto." });
-                return;
-            }
-            // Crear el producto usando el servicio
-            const nuevoProducto = await productService.createProduct(data);
-
-            // Obtener la lista actualizada de productos y enviarla a todos los clientes
-            const productosActualizados = await productService.getProducts();
-            console.log('hola',productosActualizados)
-           
-            io.emit('productosActualizados', productosActualizados);
-        } catch (error) {
-            console.error("Error al manejar 'nuevoProducto':", error);
-            socket.emit('error', { message: "Error al crear el producto." });
-        }
-    });   
-});*/
 
 

@@ -51,7 +51,27 @@ class userController{
           console.log(error)
         }
     }
-
+    createMany = async (req, res) => {
+        try {
+            const body = req.body;
+    
+            // Validación para múltiples usuarios
+            if (!Array.isArray(body)) {
+                return { status: 'error', error: 'Se esperaba un arreglo de usuarios' };
+            }
+    
+            const invalidUsers = body.filter(user => !user.name || !user.email);
+            if (invalidUsers.length > 0) {
+                return { status: 'error', error: 'Algunos usuarios tienen datos incompletos', invalidUsers };
+            }
+    
+            const result = await this.userService.insertMany(body);
+            return { status: 'success', data: result };
+        } catch (error) {
+            console.error(error);
+            return { status: 'error', error: 'Error interno del servidor' };
+        }
+    };
     //Actualizar 1 usuario
     updateUser = async (req, res) => {
         const { uid } = req.params;

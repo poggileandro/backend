@@ -9,6 +9,7 @@ class UserRepository {
     createUser = async newUser => await this.dao.create(newUser) 
     deleteUser = async userToDelete => await this.dao.deleteOne(userToDelete);
     updateUser = async (id,userToUpdate) => await this.dao.updateOne(id, userToUpdate);
+    insertMany = async (newUsers) => await this.dao.insertMany(newUsers);
 }
 
 // este clase maneja el dao y dto

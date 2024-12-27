@@ -12,6 +12,7 @@ class usersDaoMongo{
     create = async newUser => await this.model.create(newUser);
     delete = async userToDelete => await this.model.deleteOne(userToDelete);
     update = async (id,userToUpdate) => await this.model.updateOne(id, userToUpdate);
+    insertMany = async (newUsers) => await this.model.insertMany(newUsers);
 }
 
 module.exports = {
